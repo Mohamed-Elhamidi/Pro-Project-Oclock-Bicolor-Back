@@ -144,6 +144,22 @@ class UserController extends AbstractController
             "groups" => "users"
         ]);
     }
-
     
+    /**
+     * @Route("/api/users/{id}", name="app_api_user_deleteUser", methods={"DELETE"})
+     */
+    
+     public function deleteUser(UserRepository $userRepository, EntityManagerInterface $entityManager, int $id): JsonResponse
+    {
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            return $this->json(["error" => "User not found"], Response::HTTP_NOT_FOUND);
+        }
+        
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return $this->json(["message" => "User deleted successfully"], Response::HTTP_OK);
+    }    
 }
