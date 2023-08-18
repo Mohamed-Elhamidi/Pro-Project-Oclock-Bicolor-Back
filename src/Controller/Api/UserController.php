@@ -2,20 +2,25 @@
 
 namespace App\Controller\Api;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
+
+use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserController extends AbstractController
 {
     /**
-     * @Route("/api/user", name="app_api_user")
+     * @Route("/api/users", name="app_api_user", methods={"GET"})
      */
-    public function index(): JsonResponse
+    public function getUsers(UserRepository $userRepository): JsonResponse
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/Api/UserController.php',
-        ]);
+        // on récupère tous les utilisateurs en BDD
+        $users = $userRepository->findAll();
+
+        
+        
+        return $this->json($users, Response::HTTP_OK, [], ["groups" => "users"]);
     }
 }
