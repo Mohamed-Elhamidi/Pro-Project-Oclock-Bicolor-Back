@@ -10,9 +10,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @UniqueEntity("email")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -30,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, unique=true)
      * @Groups({"users"})
      */
     private $email;
@@ -41,10 +43,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
      * @Groups({"users"})
      */
-    private $roles;
+    private $roles = [];
 
     /**
      * @ORM\Column(type="datetime_immutable")
@@ -131,12 +133,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRoles(): ?string
+    public function getRoles(): array
     {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
         return $this->roles;
     }
 
-    public function setRoles(string $roles): self
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 

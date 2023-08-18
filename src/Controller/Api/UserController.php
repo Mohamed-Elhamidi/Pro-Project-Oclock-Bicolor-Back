@@ -151,15 +151,19 @@ class UserController extends AbstractController
     
      public function deleteUser(UserRepository $userRepository, EntityManagerInterface $entityManager, int $id): JsonResponse
     {
+        // récuperer utilisateur par son Id
         $user = $userRepository->find($id);
 
+        //Je vérifie si l'utilisateur existe / si il n'existe pas on renvoi un message d'erreur
         if (!$user) {
             return $this->json(["error" => "User not found"], Response::HTTP_NOT_FOUND);
         }
         
+        // suppression utilisateur en BDD
         $entityManager->remove($user);
         $entityManager->flush();
 
+        // Retour d'une réponse JSON avec les deletes  mises à jour
         return $this->json(["message" => "User deleted successfully"], Response::HTTP_OK);
     }    
 }
