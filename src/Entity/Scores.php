@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+
 use App\Entity\Game;
 use App\Repository\ScoresRepository;
 use Doctrine\ORM\Mapping as ORM;
