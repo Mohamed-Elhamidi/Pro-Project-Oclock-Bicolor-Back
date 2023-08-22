@@ -22,12 +22,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("scores")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups({"users"})
+     * @Groups("scores")
      */
     private $name;
 
