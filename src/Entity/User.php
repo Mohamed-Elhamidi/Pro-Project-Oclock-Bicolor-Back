@@ -22,14 +22,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("scores")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users"})
-     * @Groups("scores")
+     * @Groups({"users", "scores", "gameScores", "userScores"})
      */
     private $name;
 
@@ -61,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user")
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user", orphanRemoval=true, cascade={"persist"})
      */
     private $scores;
 

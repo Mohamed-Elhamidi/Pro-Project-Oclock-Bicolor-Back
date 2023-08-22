@@ -17,13 +17,13 @@ class Game
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("scores")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("scores")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $name;
 
@@ -38,7 +38,7 @@ class Game
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_game")
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_game", orphanRemoval=true, cascade={"persist"})
      */
     private $scores;
 

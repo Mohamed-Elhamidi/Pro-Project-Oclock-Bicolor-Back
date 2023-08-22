@@ -21,19 +21,19 @@ class Scores
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="scores")
-     * @Groups("scores")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="scores")
-     * @Groups("scores")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id_game;
 
     /**
      * @ORM\Column(type="integer")
-     * @Groups("scores")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $nbPoints;
 
