@@ -38,7 +38,7 @@ class Game
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_game", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_game", orphanRemoval=true)
      */
     private $scores;
 

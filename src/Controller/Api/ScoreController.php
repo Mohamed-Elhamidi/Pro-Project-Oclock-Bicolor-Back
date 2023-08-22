@@ -83,23 +83,58 @@ class ScoreController extends AbstractController
         return $response;
     }
 
-        /**
+    /**
      * @Route("/api/scores", name="app_api_scores_postscores", methods={"POST"})
      */
-    public function postScores(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
+    public function postScores(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $userRepository, GameRepository $gameRepository): JsonResponse
     {
+        //On a déjà notre user et notre game
+        //$id_user = 1;
+        //$id_game = 2;
+        // Récupérez les entités User et Game à partir de leurs IDs
+        //$user = $entityManager->getRepository(User::class)->find($id_user);
+        //$game = $entityManager->getRepository(Game::class)->find($id_game);
+        
+        //
+        //$score = new Scores();
+        //$score->setIdUser($user);
+        //$score->setIdGame($game);
+        //$score->setNbPoints(100);
+
         // je récupere un json en brut
         $jsonContent = $request->getContent();
 
+    
+
         // ! potentiellement j'ai une erreur si le json n'est pas bon
         // je transforme ce json en entité score
-        try {
-            $scores = $serializer->deserialize($jsonContent, Scores::class, 'json');
-        } catch (NotEncodableValueException $e) {
-            // ! je gere le cas ou il ya l'erreur
-            return $this->json(["error" => "JSON INVALIDE"], Response::HTTP_BAD_REQUEST);
+        // try {
+        //     $scores = $serializer->deserialize($jsonContent, Scores::class, 'json');
+        // } catch (NotEncodableValueException $e) {
+        //     // ! je gere le cas ou il ya l'erreur
+        //     return $this->json(["error" => "JSON INVALIDE"], Response::HTTP_BAD_REQUEST);
+        // }
+
+        $jsonDecodedData = json_decode($jsonContent, true);
+
+        $userId = $jsonDecodedData['id_user'] ?? null;
+        if($userId) {
+            $user = $userRepository->find($userId);
+            if($user) {
+                $entityManager->persist($user);
+                $scores->setIdUser($user);
+            }
         }
 
+        $gameId = $jsonDecodedData['id_game'] ?? null;
+        if($gameId) {
+            $game = $gameRepository->find($gameId);
+            if($game) {
+                $entityManager->persist($game);
+                $scores->setIdGame($game);
+            }
+        }
+        
         // je detecte les erreurs sur mon entité avant de la persister
         $errors = $validator->validate($scores);
 
@@ -118,6 +153,14 @@ class ScoreController extends AbstractController
             return $this->json($dataErrors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
+        if ($user) {
+            $entityManager->persist($user);
+        }
+
+        if($game) {
+            $entityManager->persist($game);
+        }
+        //dd($scores);
         // on oublie pas de persist et de flush
         $entityManager->persist($scores);
 

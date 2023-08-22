@@ -22,6 +22,21 @@ class AppProvider
         ]
     ];
 
+    private $game = [
+        "game1" => [
+            "name" => "Game 1"
+        ],
+
+        "game2" => [
+            "name" => "Game 2"
+        ],
+
+        "game3" => [
+            "name" => "Game 3"
+        ],
+
+    ];
+
      /**
      * Get a a user, available roles : admin, user
      * @param string the role of the user
@@ -34,5 +49,16 @@ class AppProvider
         }
         return $this->user[array_rand($this->user)];
     }
+
+    /**
+     * Get a game
+     * @return array a role
+     */
+    public function game()
+    {
+        
+        return $this->game[array_rand($this->game)];
+    }
+
 
 }

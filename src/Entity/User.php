@@ -60,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user", orphanRemoval=true)
      */
     private $scores;
 
