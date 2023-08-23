@@ -17,7 +17,7 @@ security:
             provider: app_user_provider
             json_login:
                 username_path: email
-                check_path: /api/login_check
+                check_path: /api/login
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
@@ -33,6 +33,8 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+            
+            
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -40,16 +42,12 @@ security:
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
 
-    # Easy way to control access for large sections of your site
+   # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-     #   - { path: ^/api/login, roles: PUBLIC_ACCESS }
-     #  - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
-
-        # Nous pourrions imaginer quelque chose comme ceci pour
-        # rendre plus strict l'accès à notre API
+        - { path: ^/api/create/user, roles: PUBLIC_ACCESS, methods: ["POST"] }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
-        - { path: ^/api,       roles: ROLE_ADMIN, methods: POST }
+        - { path: ^/api,       roles: ROLE_USER, methods: ["GET"] }
         - { path: ^/api,       roles: ROLE_ADMIN }
 
 when@test:

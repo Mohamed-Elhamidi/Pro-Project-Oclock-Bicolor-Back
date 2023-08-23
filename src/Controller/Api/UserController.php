@@ -48,9 +48,9 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/api/users", name="app_api_user_postUser", methods={"POST"})
+     * @Route("/api/create/user", name="app_api_user_postUser", methods={"POST"})
      */
-    public function postUsers(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
+    public function postUser(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
     {
         // je récupere un json en brut
         $jsonContent = $request->getContent();
@@ -98,7 +98,7 @@ class UserController extends AbstractController
 
 
     /**
-     * @Route("/api/users/{id}", name="app_api_user_postUser", methods={"PATCH"})
+     * @Route("/api/users/{id}", name="app_api_user_patchUser", methods={"PATCH"})
      */
     public function patchUser(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, $id): JsonResponse
     {
