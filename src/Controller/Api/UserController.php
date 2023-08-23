@@ -14,6 +14,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasher;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 
 class UserController extends AbstractController
@@ -50,7 +52,7 @@ class UserController extends AbstractController
     /**
      * @Route("/api/create/user", name="app_api_user_postUser", methods={"POST"})
      */
-    public function postUser(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager): JsonResponse
+    public function postUser(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): JsonResponse
     {
         // je récupere un json en brut
         $jsonContent = $request->getContent();
@@ -82,6 +84,9 @@ class UserController extends AbstractController
             // je retourne le json avec mes erreurs
             return $this->json($dataErrors, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
+
+        $hashedPassword = $passwordHasher->hashPassword($user, $user->getPassword());
+        $user->setPassword($hashedPassword);
 
         // on oublie pas de persist et de flush
         $entityManager->persist($user);
