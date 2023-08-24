@@ -17,7 +17,7 @@ class AppProvider
             "name" => "User",
             "email" => "user@oclock.io",
             "password" => "user",
-            "roles" => [],
+            "roles" => []
             
         ]
     ];
