@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\DependencyInjection\Loader\Configurator\serializer;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
@@ -85,16 +86,59 @@ class ScoreController extends AbstractController
         return $response;
     }
 
+
     /**
-     * @Route("/api/get/score", name="app_api_scores_postscores", methods={"GET"})
+     * @Route("/api/score", name="app_api_scores_postscore", methods={"POST"})
      */
-    public function getScore(TokenStorageInterface $tokenStorage): JsonResponse
+    public function postScore(TokenStorageInterface $tokenStorage, Request $request): JsonResponse
     {
         $user = $tokenStorage->getToken()->getUser();
-        dd($user);
+        
+        if (!$user instanceof User) {
+            return $this->json(['message' => 'User not found'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        //Enregistrer le score
+        $entityManager = $this->getDoctrine()->getManager();
+        $data = json_decode($request->getContent(), true);
+
+        //Gestion de l'erreur JSON invalide
+        //$serializer = $this->container->get('serializer');
+        //$jsonContent = $request->getContent();
+
+        //try {
+            //$user = $serializer->deserialize($jsonContent, User::class, 'json');
+        //} catch (NotEncodableValueException $e) {
+            // ! je gere le cas ou il ya l'erreur
+        //    return $this->json(["error" => "JSON INVALID"], Response::HTTP_BAD_REQUEST);
+        //}
+
+        //Creer et rendre persistante l'entite Score
+
+        $score = new Scores();
+        //$score->setIdUser($user->getId());
+        $score->setIdUser($user);
+        dd($score);
+        $score->setIdGame($data['id_game']);
+        $score->setNbPoints($data['score']);
+
+        
+
+        $entityManager->persist($score);
+        $entityManager->flush();
+
+        return $this->json(["message" => "Score saved"], JsonResponse::HTTP_CREATED);
 
         // on ne revoit pas une vue mais un json
-        return $this->json($user);
+        //return $this->json($user);
+        //return $this->json($score, JsonResponse::HTTP_CREATED);
+        //return $this->json([
+            //'user_id' => $user->getId(),
+            //'game_id' => $user->getIdGame(),
+            //'score' => $user->getNbPoints(),
+            //'message' => 'Score saved',
+        //], JsonResponse::HTTP_CREATED);
+
     }
 
 }
