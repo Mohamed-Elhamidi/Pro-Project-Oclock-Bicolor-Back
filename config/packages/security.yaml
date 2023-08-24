@@ -47,7 +47,7 @@ security:
     access_control:
         - { path: ^/api/createUser, roles: PUBLIC_ACCESS, methods: ["POST"] }
         #- { path: ^/api/login, roles: PUBLIC_ACCESS }
-        #- { path: ^/api,       roles: ROLE_USER, methods: ["GET"] }
+        - { path: ^/api/get/score,       roles: ROLE_USER, methods: ["GET"] }
         - { path: ^/api,       roles: ROLE_ADMIN }
 
 when@test:
