@@ -48,7 +48,7 @@ security:
         - { path: ^/api/createUser, roles: PUBLIC_ACCESS, methods: ["POST"] }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/score,       roles: ROLE_USER, methods: ["POST"] }
-        - { path: ^/api,       roles: ROLE_ADMIN }
+        - { path: ^/api,       roles: ROLE_ADMIN }th: ^/api,       roles: ROLE_USER, methods: ["GET"] }
 
 when@test:
     security:
@@ -62,3 +62,5 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
+
+

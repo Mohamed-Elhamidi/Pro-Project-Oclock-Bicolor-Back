@@ -170,7 +170,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->scores->contains($score)) {
             $this->scores[] = $score;
-            $score->setIdUser($this);
+            $score->setidUser($this);
         }
 
         return $this;
@@ -180,8 +180,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->scores->removeElement($score)) {
             // set the owning side to null (unless already changed)
-            if ($score->getIdUser() === $this) {
-                $score->setIdUser(null);
+            if ($score->getidUser() === $this) {
+                $score->setidUser(null);
             }
         }
 
