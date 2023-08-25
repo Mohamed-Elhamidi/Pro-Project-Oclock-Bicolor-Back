@@ -50,8 +50,7 @@ class AppFixtures extends Fixture
             $admin->setPassword($this->passwordHasher->hashPassword($admin, $dataUser["password"]));
             // Je set les roles, c'est un tableau
             $admin->setRoles($dataUser["roles"]);
-            // je set la date de création de l'utilisateur
-            $admin->setCreatedAt(new \DateTimeImmutable($faker->date()));
+            
 
             // On oublis pas de persister l'objet
             $manager->persist($admin);

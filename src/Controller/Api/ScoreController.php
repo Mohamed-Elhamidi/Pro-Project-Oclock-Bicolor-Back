@@ -2,9 +2,9 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Scores;
 use App\Entity\Game;
 use App\Entity\User;
+use App\Entity\Scores;
 use App\Repository\GameRepository;
 use App\Repository\UserRepository;
 use App\Repository\ScoresRepository;
@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 
 class ScoreController extends AbstractController
@@ -84,90 +85,102 @@ class ScoreController extends AbstractController
     }
 
     /**
-     * @Route("/api/scores", name="app_api_scores_postscores", methods={"POST"})
+     * @Route("/api/score", name="app_api_scores_postscore", methods={"POST"})
      */
-    public function postScores(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, UserRepository $userRepository, GameRepository $gameRepository): JsonResponse
+    public function enregistrerScore(TokenStorageInterface $tokenStorage, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
-        //On a déjà notre user et notre game
-        //$id_user = 1;
-        //$id_game = 2;
-        // Récupérez les entités User et Game à partir de leurs IDs
-        //$user = $entityManager->getRepository(User::class)->find($id_user);
-        //$game = $entityManager->getRepository(Game::class)->find($id_game);
-        
-        //
-        //$score = new Scores();
-        //$score->setIdUser($user);
-        //$score->setIdGame($game);
-        //$score->setNbPoints(100);
+        // Récupère l'utilisateur authentifié à partir du token
+        $user = $tokenStorage->getToken()->getUser();
+       
+        // Récupère le score soumis à partir des données JSON de la requête
+        $scoreSoumis = $request->request->get('score');
 
-        // je récupere un json en brut
-        $jsonContent = $request->getContent();
-
-    
-
-        // ! potentiellement j'ai une erreur si le json n'est pas bon
-        // je transforme ce json en entité score
-        // try {
-        //     $scores = $serializer->deserialize($jsonContent, Scores::class, 'json');
-        // } catch (NotEncodableValueException $e) {
-        //     // ! je gere le cas ou il ya l'erreur
-        //     return $this->json(["error" => "JSON INVALIDE"], Response::HTTP_BAD_REQUEST);
-        // }
-
-        $jsonDecodedData = json_decode($jsonContent, true);
-
-        $userId = $jsonDecodedData['id_user'] ?? null;
-        if($userId) {
-            $user = $userRepository->find($userId);
-            if($user) {
-                $entityManager->persist($user);
-                $scores->setIdUser($user);
-            }
-        }
-
-        $gameId = $jsonDecodedData['id_game'] ?? null;
-        if($gameId) {
-            $game = $gameRepository->find($gameId);
-            if($game) {
-                $entityManager->persist($game);
-                $scores->setIdGame($game);
-            }
-        }
-        
-        // je detecte les erreurs sur mon entité avant de la persister
-        $errors = $validator->validate($scores);
-
-        // on renvoi un json avec les erreurs
-        if (count($errors) > 0) {
-
-            // je crée un nouveau tableau d'erreur
-            $dataErrors = [];
-
-            foreach ($errors as $error) {
-                // j'injecte dans le tableau à l'index de l'input, les messages d'erreurs qui concernent l'erreur en question
-                $dataErrors[$error->getPropertyPath()][] = $error->getMessage();
-            }
-
-            // je retourne le json avec mes erreurs
-            return $this->json($dataErrors, Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
+        // Récupère l'ID du jeu soumis à partir des données JSON de la requête
+        $idJeuSoumis = $request->request->get('id_jeu'); // Assurez-vous que la clé 'id_jeu' correspond à celle utilisée dans la requête
+        //dd($idJeuSoumis);
+        // Vérifie si l'utilisateur est authentifié
         if ($user) {
-            $entityManager->persist($user);
+            // Crée une nouvelle entité Scores et associe l'utilisateur et le score
+            $entiteScore = new Scores();
+
+            //Ici, j'associe l'user actuel à l'entité Scores
+            $entiteScore->setIdUser($user);
+            
+            //Ici, je vérifie si le score soumis est un entier valide
+            if (is_numeric($scoreSoumis)) {
+                //Ici, je convertis le score soumis en un entier
+                $scoreInt = (int) $scoreSoumis;
+                //Ici, j'associe le score à l'entité score
+                $entiteScore->setNbPoints($scoreInt);
+
+                // Récupère l'entité Game en fonction de l'id envoyé
+                $jeu = $entityManager->getRepository(Game::class)->find($idJeuSoumis);
+
+                // Vérifie si le jeu existe
+                if ($jeu) {
+                    // Associe l'entité Game à l'entité Scores
+                    $entiteScore->setIdGame($jeu);
+
+                    // Persiste et envoie l'entité Scores à la base de données
+                    $entityManager->persist($entiteScore);
+                    $entityManager->flush(); 
+
+                    // Crée un tableau pour stocker les détails du score
+                    $detailsScore = [
+                        'utilisateur' => $user->getUserIdentifier(),
+                        'score' => $scoreInt,
+                        'jeu' => $jeu->getIdGame() // Assurez-vous d'ajuster la méthode pour obtenir le nom du jeu
+                    ];
+
+                    // Retourne les détails du score sous forme de réponse JSON
+                    return $this->json($detailsScore);
+                } else {
+                    // Si le jeu n'existe pas
+                    return $this->json(['message' => 'Le jeu soumis n\'existe pas.']);
+                }
+            } else {
+                // Si le score soumis n'est pas valide
+                return $this->json(['message' => 'Le score soumis n\'est pas valide.']);
+            }
         }
 
-        if($game) {
-            $entityManager->persist($game);
-        }
-        //dd($scores);
-        // on oublie pas de persist et de flush
-        $entityManager->persist($scores);
-
-        $entityManager->flush();
-
-        // on ne revoit pas une vue mais un json
-        return $this->json($scores, Response::HTTP_CREATED, [], ['groups' => 'scores']);
+        // Si aucun token (utilisateur non authentifié)
+        return $this->json(['message' => 'Aucun token trouvé.']);
     }
-
 }
+
+
+    // /**
+    //  * @Route("/api/score", name="app_api_scores_postscore", methods={"post"})
+    //  */
+    // public function postScore(TokenStorageInterface $tokenStorage): JsonResponse
+    // {
+
+    //     //Je récupère le Token 
+    //     $token = $tokenStorage->getToken();
+    //     //Je vérifie si le token existe donc si l'user est authentifié 
+    //     if ($token) {
+    //         // Get the authenticated user from the token
+    //         $user = $token->getUser();
+
+    //         // Get the roles associated with the user
+    //         $roles = $user->getRoles();
+
+    //         $score = $user->getScores();
+    //         dd($score);
+
+    //         // Create an array to store token details
+    //         $tokenDetails = [
+    //             'username' => $user->getUserIdentifier(),
+    //             'roles' => $roles,
+    //             'score' => $score
+    //         ];
+    //         //dd($tokenDetails);
+    //         // Return token details as a JSON response
+    //         return $this->json($tokenDetails);
+    //     }
+
+    //     // If no token (user is not authenticated)
+    //     return $this->json(['message' => 'No token found.']);
+
+    // }
