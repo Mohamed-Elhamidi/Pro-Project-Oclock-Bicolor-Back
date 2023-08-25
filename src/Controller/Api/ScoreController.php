@@ -119,7 +119,7 @@ class ScoreController extends AbstractController
         //$score->setIdUser($user->getId());
         $score->setIdUser($user);
         dd($score);
-        $score->setIdGame($data['id_game']);
+        $score->setIdGame($data['game_id']);
         $score->setNbPoints($data['score']);
 
         
