@@ -26,9 +26,9 @@
                 <td>{{ user.email }}</td>
                 <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
                 <td>
-                    <a href="#" class="btn btn-sm btn-outline-primary">Show</a>
-                    <a href="#" class="btn btn-sm btn-outline-success">Edit</a>
-                    <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
+                    <a href="{{ path('app_admin_user_show', {'id': user.id}) }}"class="btn btn-sm btn-outline-primary">Show</a>
+                    <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-outline-success">Edit</a>
+                    <a href="{{ path('app_admin_user_delete', {'id': user.id}) }}" class="btn btn-sm btn-outline-danger">Delete</a>
                 </td>
             </tr>
         {% else %}
@@ -39,5 +39,5 @@
         </tbody>
     </table>
 
-    <a href="#" class="btn btn-primary mt-3">Create New</a>
+    <a href="{{ path('app_admin_user_add')}}" class="btn btn-primary mt-3">Create New</a>
 {% endblock %}
