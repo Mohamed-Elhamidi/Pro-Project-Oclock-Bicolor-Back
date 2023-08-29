@@ -23,7 +23,7 @@ class Game
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"scores", "gameScores", "userScores"})
+     * @Groups({"scores", "gameScores", "userScores", "comments"})
      */
     private $name;
 
@@ -43,7 +43,7 @@ class Game
     private $scores;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="idGame")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="id_game", orphanRemoval=true)
      */
     private $comments;
 

@@ -20,7 +20,7 @@ class Scores
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="scores", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="scores")
      * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id_user;

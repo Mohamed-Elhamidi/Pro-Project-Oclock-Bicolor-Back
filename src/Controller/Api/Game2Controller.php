@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class Game2Controller extends AbstractController
 {
     /**
-     * @Route("/api/game2", name="app_api_game2")
+     * @Route("/api/game/2", name="app_api_game2")
      */
     public function game2(): JsonResponse
     {

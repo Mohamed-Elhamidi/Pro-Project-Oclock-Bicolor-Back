@@ -24,7 +24,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ScoreController extends AbstractController
 {
     /**
-     * @Route("/api/scores", name="app_api_scores_getScores", methods={"GET"})
+     * @Route("/api/score", name="app_api_scores_getScores", methods={"GET"})
      */
     public function getScores(ScoresRepository $scoreRepository)
     {
@@ -39,7 +39,7 @@ class ScoreController extends AbstractController
     }
 
     /**
-     * @Route("/api/games/{id}/scores", name="app_api_scores_getScoresByGame", methods={"GET"})
+     * @Route("/api/score/{id}/game", name="app_api_scores_getScoresByGame", methods={"GET"})
      */
     public function getScoresByGame(int $id, GameRepository $gameRepository): JsonResponse
     {
@@ -59,24 +59,24 @@ class ScoreController extends AbstractController
     }
 
     /**
-     * @Route("/api/user/{id}/scores", name="app_api_scores_getScoresByUser", methods={"GET"})
+     * @Route("/api/score/{id}/user", name="app_api_scores_getScoresByUser", methods={"GET"})
      */
     public function getScoresByUser(int $id, UserRepository $userRepository): JsonResponse
     {
         //Je récupère les id des user
         $user = $userRepository->find($id);
-
+        //dd($user);
         if (!$user) {
             return $this->json(["error" => "Utilisateur introuvable"], Response::HTTP_NOT_FOUND);
         }
         // Je récupère tous les scores
         $scores = $user->getScores();
-
+        //dd($scores);
         // si pas de scores, je renvois une 404 propre en json
         if (!$scores) {
             return $this->json(["error" => "Scores introuvable"], Response::HTTP_NOT_FOUND);
         }
-        // Je créer une réponse en JSON des scores, le groupe "scores" permet d'éviter les références circulaires
+        // Je créer une réponse en JSON des scores, le groupe "userScores" permet d'éviter les références circulaires
         $response = $this->json($scores, 200, [], ['groups' => 'userScores']);
 
         // je retourne la réponse
@@ -87,7 +87,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/api/score", name="app_api_scores_postscore", methods={"POST"})
      */
-    public function enregistrerScore(TokenStorageInterface $tokenStorage, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function add(TokenStorageInterface $tokenStorage, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         // Récupère l'utilisateur authentifié à partir du token
         $user = $tokenStorage->getToken()->getUser();
