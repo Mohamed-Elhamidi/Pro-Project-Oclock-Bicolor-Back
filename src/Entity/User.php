@@ -20,12 +20,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"scores", "userScores"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
-     * @Groups({"users"})
+     * @Groups({"users", "scores"})
      */
     private $email;
 
@@ -43,12 +44,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"users"})
+     * @Groups({"users", "scores", "userScores"})
      */
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="userId")
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user")
      */
     private $scores;
 

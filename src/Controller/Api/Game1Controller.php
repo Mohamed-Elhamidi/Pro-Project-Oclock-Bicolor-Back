@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class Game1Controller extends AbstractController
 {
     /**
-     * @Route("/api/game1", name="app_api_game")
+     * @Route("/api/game/1", name="app_api_game")
      */
     public function index(): JsonResponse
     {

@@ -13,7 +13,7 @@ use ourcodeworld\NameThatColor\ColorInterpreter as NameThatColor;
 class Game3Controller extends AbstractController
 {
     /**
-     * @Route("/api/game3", name="app_api_game3")
+     * @Route("/api/game/3", name="app_api_game3")
      */
     public function index(): JsonResponse
     {
