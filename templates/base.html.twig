@@ -44,16 +44,13 @@
                         <li class="nav-item">
                             <a class="nav-link {% block commentActive %}{% endblock %}" href="#"><i class="bi bi-chat-left-text"></i> Comments</a>
                         </li>
+                         <span>{{app.user}}</span>
                         
-                    {% endblock %}
+                    
                 </ul>
                 
 						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                            <li>
-                              <pre>
-                                {# {{ dump(app.user) }} #}
-                              </pre>
-                            </li>
+                            
 						</ul>
 						<a href="#"  class="btn btn-danger me-2">Log out</a>
 				
@@ -62,7 +59,7 @@
             </div>
         </div>
     </nav>
-
+{% endblock %}
     
 
 
