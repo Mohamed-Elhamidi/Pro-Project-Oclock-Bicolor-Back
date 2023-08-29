@@ -99,14 +99,9 @@ class ScoreController extends AbstractController
         $scoreSoumis = $jsonDataArray['score'];
 
 
-        //dd($user);
-        // Récupère le score soumis à partir des données JSON de la requête
-        //$scoreSoumis = $request->request->get('score');
-        //dd($scoreSoumis);
         // Récupère l'ID du jeu soumis à partir des données JSON de la requête
         $idJeuSoumis = $jsonDataArray['id_jeu'];
-        //$idJeuSoumis = $request->request->get('id_jeu'); // Assurez-vous que la clé 'id_jeu' correspond à celle utilisée dans la requête
-        //dd($idJeuSoumis);
+        
         // Vérifie si l'utilisateur est authentifié
         if ($user) {
             // Crée une nouvelle entité Scores et associe l'utilisateur et le score
@@ -114,7 +109,7 @@ class ScoreController extends AbstractController
 
             //Ici, j'associe l'user actuel à l'entité Scores
             $entiteScore->setIdUser($user);
-            //var_dump($scoreSoumis);
+            
             //Ici, je vérifie si le score soumis est un entier valide
             if (is_numeric($scoreSoumis)) {
                 //Ici, je convertis le score soumis en un entier
@@ -155,54 +150,6 @@ class ScoreController extends AbstractController
 
         // Si aucun token (utilisateur non authentifié)
         return $this->json(['message' => 'Aucun token trouvé.']);
-    }
-
-    /**
-     * @Route("/api/score/{id}", name="app_api_scores_patchScore", methods={"PATCH"})
-     */
-    public function patchScore(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, $id): JsonResponse
-    {
-        // Obtient le score existant en fonction de l'ID fourni dans l'URL
-        $score = $entityManager->getRepository(Scores::class)->find($id);
-
-        // Vérifie si le score existe
-        if (!$score) {
-            return $this->json(["error" => "Score introuvable"], Response::HTTP_NOT_FOUND);
-        }
-
-        // Obtient le contenu JSON de la requête
-        $jsonContent = $request->getContent();
-
-        // Désérialise le JSON pour mettre à jour le score
-        try {
-            $updatedScore = $serializer->deserialize($jsonContent, Scores::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $score]);
-        } catch (NotEncodableValueException $e) {
-            return $this->json(["error" => "JSON INVALIDE"], Response::HTTP_BAD_REQUEST);
-        }
-
-        // Valide les erreurs de validation
-        $errors = $validator->validate($updatedScore);
-
-        // Vérifie s'il y a des erreurs de validation
-        if (count($errors) > 0) {
-            $dataErrors = [];
-
-            // Rassemble les erreurs de validation pour chaque champ
-            foreach ($errors as $error) {
-                $dataErrors[$error->getPropertyPath()][] = $error->getMessage();
-            }
-
-            // Retourne une réponse JSON avec les erreurs de validation
-            return $this->json($dataErrors, Response::HTTP_UNPROCESSABLE_ENTITY);
-        }
-
-        // Enregistre les données mises à jour dans la base de données
-        $entityManager->flush();
-
-        // Retourne une réponse JSON avec les données mises à jour du score
-        return $this->json([$updatedScore], Response::HTTP_OK, [
-            "Location" => $this->generateUrl("app_api_scores_patchScore", ["id" => $updatedScore->getId()])
-        ]);
     }
 
     /**
