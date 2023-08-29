@@ -48,7 +48,7 @@ security:
         - { path: ^/api/createUser, roles: PUBLIC_ACCESS, methods: ["POST"] }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/score,       roles: ROLE_USER, methods: ["POST"] }
-        - { path: ^/api,       roles: ROLE_ADMIN }th: ^/api,       roles: ROLE_USER, methods: ["GET"] }
+        - { path: ^/api,       roles: ROLE_ADMIN }
 
 when@test:
     security:
