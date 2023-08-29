@@ -87,7 +87,7 @@ class ScoreController extends AbstractController
     /**
      * @Route("/api/score", name="app_api_scores_postscore", methods={"POST"})
      */
-    public function enregistrerScore(TokenStorageInterface $tokenStorage, Request $request, EntityManagerInterface $entityManager): JsonResponse
+    public function add(TokenStorageInterface $tokenStorage, Request $request, EntityManagerInterface $entityManager): JsonResponse
     {
         // Récupère l'utilisateur authentifié à partir du token
         $user = $tokenStorage->getToken()->getUser();

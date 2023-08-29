@@ -23,7 +23,7 @@ class Game
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"scores", "gameScores", "userScores"})
+     * @Groups({"scores", "gameScores", "userScores", "comments"})
      */
     private $name;
 

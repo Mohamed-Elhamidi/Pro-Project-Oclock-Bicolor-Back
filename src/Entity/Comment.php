@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -19,6 +20,7 @@ class Comment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"comments", "CommentsWithRelations"})
      */
     private $content;
 
@@ -34,13 +36,13 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
-     * 
+     * @Groups({"comments"})
      */
     private $id_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="comments")
-     * 
+     * @Groups({"comments"})
      */
     private $id_game;
 
