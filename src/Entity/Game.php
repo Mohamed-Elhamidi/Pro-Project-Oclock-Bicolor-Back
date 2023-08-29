@@ -43,7 +43,7 @@ class Game
     private $scores;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="idGame")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="id_game", orphanRemoval=true)
      */
     private $comments;
 

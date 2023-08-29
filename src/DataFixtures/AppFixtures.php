@@ -5,6 +5,9 @@ namespace App\DataFixtures;
 use Faker\Factory;
 use App\Entity\Game;
 use App\Entity\User;
+use DateTimeImmutable;
+use App\Entity\Comment;
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ObjectManager;
 use App\DataFixtures\Provider\AppProvider;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -12,7 +15,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-
     private $passwordHasher;
 
 
@@ -50,16 +52,18 @@ class AppFixtures extends Fixture
             $admin->setPassword($this->passwordHasher->hashPassword($admin, $dataUser["password"]));
             // Je set les roles, c'est un tableau
             $admin->setRoles($dataUser["roles"]);
-            
+
 
             // On oublis pas de persister l'objet
             $manager->persist($admin);
         }
 
+
+
         //! GAMES
         for ($g = 0; $g < 3; $g++) {
             // j'utilise mon provider pour récupérer un game unique
-            $dataGame = $faker->unique()->game();
+            $dataGame = $faker->game();
             // J'instancie un nouvel obet game
             $game = new Game();
             // je set le nom du game
@@ -69,8 +73,22 @@ class AppFixtures extends Fixture
             // je persist l'objet en BDD
             $manager->persist($game);
         }
+        
+        // ! COMMENT
+        for ($m = 0; $m < mt_rand(0, 5); $m++) {
+            $comment = new Comment();
 
+            $comment->setContent($faker->text());
+            $comment->setCreatedAt(new DateTimeImmutable($faker->date()));
+            $comment->setupdatedAt(new DateTimeImmutable($faker->date()));
 
+            
+            
+            $comment->setIdGame($game);
+            $comment->setIdUser($admin);
+
+            $manager->persist($comment);
+        }
         $manager->flush();
     }
 }

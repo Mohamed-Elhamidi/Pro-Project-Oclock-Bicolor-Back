@@ -49,9 +49,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user")
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user", orphanRemoval=true)
      */
     private $scores;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="id_game", orphanRemoval=true)
+     */
+    private $comments;
+
 
     public function __construct()
     {
@@ -184,6 +190,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($score->getidUser() === $this) {
                 $score->setidUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Comment>
+     */
+    public function getComments(): Collection
+    {
+        return $this->comments;
+    }
+
+    public function addComment(Comment $comment): self
+    {
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
+            $comment->setidUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeComment(Comment $comment): self
+    {
+        if ($this->comments->removeElement($comment)) {
+            // set the owning side to null (unless already changed)
+            if ($comment->getidUser() === $this) {
+                $comment->setidUser(null);
             }
         }
 

@@ -18,16 +18,6 @@ class Comment
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $id_user;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $id_game;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private $content;
@@ -43,42 +33,20 @@ class Comment
     private $updatedAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
+     * 
      */
-    private $idUser;
+    private $id_user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=game::class, inversedBy="comments")
+     * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="comments")
+     * 
      */
-    private $idGame;
+    private $id_game;
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getIdUser(): ?int
-    {
-        return $this->id_user;
-    }
-
-    public function setIdUser(int $id_user): self
-    {
-        $this->id_user = $id_user;
-
-        return $this;
-    }
-
-    public function getIdGame(): ?int
-    {
-        return $this->id_game;
-    }
-
-    public function setIdGame(int $id_game): self
-    {
-        $this->id_game = $id_game;
-
-        return $this;
     }
 
     public function getContent(): ?string
@@ -113,6 +81,30 @@ class Comment
     public function setUpdatedAt(?\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getIdUser(): ?user
+    {
+        return $this->id_user;
+    }
+
+    public function setIdUser(?user $id_user): self
+    {
+        $this->id_user = $id_user;
+
+        return $this;
+    }
+
+    public function getIdGame(): ?game
+    {
+        return $this->id_game;
+    }
+
+    public function setIdGame(?game $id_game): self
+    {
+        $this->id_game = $id_game;
 
         return $this;
     }
