@@ -35,50 +35,27 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     {% block nav %}
                         <li class="nav-item">
-                            <a class="nav-link {% block homeActive %}{% endblock %}" <a href="#"><i class="bi bi-house-door"></i>Home frontpage</a>
+                            <a class="nav-link" <a href="#"><i class="bi bi-house-door"></i>Home frontpage</a>
 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% block movieActive %}{% endblock %}" href="#"><i class="bi bi-person"></i>Users</a>
+                            <a class="nav-link {% block userActive %}{% endblock %}" href="{{ path('app_admin_user_list') }}"><i class="bi bi-person"></i>Users</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% block favoriteActive %}{% endblock %}" href="#"><i class="bi bi-chat-left-text"></i> Comments</a>
+                            <a class="nav-link {% block commentActive %}{% endblock %}" href="#"><i class="bi bi-chat-left-text"></i> Comments</a>
                         </li>
-                        {% if is_granted("ROLE_MANAGER") %}
-								<li class="nav-item">
-									<a class="nav-link" href="#">
-										<i class="bi bi-key"></i>
-										Admin</a>
-								</li>
-
-							{% endif %}
+                        
                     {% endblock %}
                 </ul>
                 
 						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-							<li class="nav-item dropdown">
-								<a
-									class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
-									<!-- Bootstrap CSS -->
-								
-									<i class="bi bi-person-square"></i>
-								</a>
-								<ul class="dropdown-menu">
-									<li>
-										<a class="dropdown-item" href="#">Profil</a>
-									</li>
-									
-									<li>
-										<hr class="dropdown-divider">
-									</li>
-									<li>
-										<a class="dropdown-item" href="#">Déconnexion</a>
-									</li>
-								</ul>
-							</li>
+                            <li>
+                              <pre>
+                                {{ dump(app.user) }}
+                              </pre>
+                            </li>
 						</ul>
-					
-						<a href="#"  class="btn btn-danger me-2">Connexion</a>
+						<a href="#"  class="btn btn-danger me-2">Log out</a>
 				
 
                 
