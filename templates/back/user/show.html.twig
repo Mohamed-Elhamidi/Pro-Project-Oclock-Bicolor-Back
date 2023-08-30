@@ -12,25 +12,50 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Roles</th>
-                <th>Scores</th>
+                <th>Game 1</th>
+                <th>Game 2</th>
+                <th>Game 3</th>
+               
                 
             </tr>
             <tr>
-                <td>{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.roles ? user.roles|json_encode : '' }}</td>
-                <td>
-                    {% if user.scores|length > 0 %}
-                    {% for scores in user.scores %}
-                       
-                       <div> {{scores.idgame.name}} = {{scores.nbPoints}} points<br></div>
-                        
-                    {% endfor %}
-                {% else %}
-                    No scores available
-                {% endif %}
-                </td>
+					<td>{{ user.id }}</td>
+					<td>{{ user.name }}</td>
+					<td>{{ user.email }}</td>
+					<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+
+
+					<td>
+						{% for scores in user.scores %}
+							{% if scores.idgame.id == 1 %}
+								<div>
+									Le {{scores.startGame|date('d-m-Y')}} = {{scores.nbPoints}} points<br/>
+                                </div>
+							{% endif %}
+						{% endfor %}
+					</td>
+
+					<td>
+						{% for scores in user.scores %}
+							{% if scores.idgame.id == 2 %}
+								<div>
+									Le {{scores.startGame|date('d-m-Y')}} = {{scores.nbPoints}} points<br/>
+                                </div>
+							{% endif %}
+						{% endfor %}
+					</td>
+
+					<td>
+						{% for scores in user.scores %}
+							{% if scores.idgame.id == 3 %}
+								<div>
+									Le {{scores.startGame|date('d-m-Y')}} = {{scores.nbPoints}} points<br/>
+                                </div>
+							{% endif %}
+						{% endfor %}
+					</td>
+				</tr>
+
         </tbody>
     </table>
 
