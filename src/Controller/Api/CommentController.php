@@ -40,8 +40,6 @@ class CommentController extends AbstractController
 
             $comment->setCreatedAt(new \DateTimeImmutable());
 
-            //$comment->setupdatedAt(new \DateTimeImmutable());
-
             $comment->setIdUser($user);
 
             $jeu = $entityManager->getRepository(Game::class)->find($idJeuSoumis);
