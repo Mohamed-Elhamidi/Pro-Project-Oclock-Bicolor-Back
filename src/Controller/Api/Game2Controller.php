@@ -2,7 +2,7 @@
 
 namespace App\Controller\Api;
 
-use ColorPalette;
+use App\Service\ColorPalette;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

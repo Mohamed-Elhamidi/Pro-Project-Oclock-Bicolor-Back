@@ -3,6 +3,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\Comment;
+use App\Entity\Game; 
 use App\Repository\GameRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,20 +20,36 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class CommentController extends AbstractController
 {
      /**
-     * @Route("/api/comment/add", name="app_api_comment_add", methods={"GET", "POST"})
+     * @Route("/api/comment/add", name="app_api_comment_add", methods={"POST"})
      */
     public function add(Request $request, SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, TokenStorageInterface $tokenStorage): Response
     {
+        
         // Récupère l'utilisateur authentifié à partir du token
         $user = $tokenStorage->getToken()->getUser();
 
         // je récupere un json en brut
         $jsonContent = $request->getContent();
-
+        $jsonDataArray = json_decode($jsonContent, true);
+        $idJeuSoumis = $jsonDataArray['id_game'];
+      
         // ! potentiellement j'ai une erreur si le json n'est pas bon
         // je transforme ce json en entité comment
         try {
             $comment = $serializer->deserialize($jsonContent, Comment::class, 'json');
+
+            $comment->setCreatedAt(new \DateTimeImmutable());
+
+            //$comment->setupdatedAt(new \DateTimeImmutable());
+
+            $comment->setIdUser($user);
+
+            $jeu = $entityManager->getRepository(Game::class)->find($idJeuSoumis);
+
+            $comment->setIdGame($jeu);
+
+            
+        
         } catch (NotEncodableValueException $e) {
             // ! je gere le cas ou il ya l'erreur
             return $this->json(["error" => "JSON INVALID"], Response::HTTP_BAD_REQUEST);
@@ -62,7 +79,7 @@ class CommentController extends AbstractController
 
         // on ne renvoit pas une vue mais un json
         return $this->json([$comment], Response::HTTP_CREATED, [
-            "Location" => $this->generateUrl("app_api_comment", ["id" => $comment->getId()])
+            "Location" => $this->generateUrl("app_api_comment_add", ["id" => $comment->getId()])
         ], [
             "groups" => "comments"
         ]);
@@ -103,5 +120,24 @@ class CommentController extends AbstractController
         // je retourne la réponse
         return $response;
     }
+
+    /**
+     * @Route("/api/comment/{id}", name="app_api_comment_delete", methods={"DELETE"})
+     */
+    public function deleteComment(int $id, CommentRepository $commentRepository, EntityManagerInterface $entityManager): JsonResponse
+    {
+        $comment = $commentRepository->find($id);
+
+        if (!$comment) {
+            return $this->json(["error" => "Comment not found"], Response::HTTP_NOT_FOUND);
+        }
+
+        // Supprimer le comentaire
+        $entityManager->remove($comment);
+        $entityManager->flush();
+
+        return $this->json(["message" => "Comment deleted successfully"], Response::HTTP_OK);
+    }
+
     
 }
