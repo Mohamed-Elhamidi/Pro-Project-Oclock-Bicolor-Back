@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}Edit Comment{% endblock %}
 
 {% block body %}
-   <h1 class="mx-2 mt-2">User {{user.id}}</h1>
+   <h1 class="mx-2 mt-2">Comment {{comment.id}}</h1>
     <div class="container mt-5">
 
     {{ include('back/user/_form.html.twig', {'button_label': 'Update'}) }}

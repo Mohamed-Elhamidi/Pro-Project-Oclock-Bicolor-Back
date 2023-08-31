@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Comments list{% endblock %}
+{% block commentActive %}active{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-4">Comments list</h1>
+<a href="{{ path('app_admin_comment_add')}}" class="btn btn-primary mt-3 mb-3">Create comment</a>
+     <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Content</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Options</th>
+                        
+                    </tr>
+        </thead>
+        <tbody>
+        {% for comment in comments %}
+    
+            <tr>
+                <td>{{ comment.id }}</td>
+                <td>{{ comment.content }}</td>
+                <td>{{ comment.createdAt|date('d-m-Y H:i:s') }}</td>
+                <td>
+                    <a href="{{ path('app_admin_comment_show', {'id': comment.id}) }}"class="btn btn-sm btn-primary">Show</a>
+                    <a href="{{ path('app_admin_comment_edit', {'id': comment.id}) }}" class="btn btn-sm btn-success">Edit</a> 
+                    {{ include('back/comment/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">No comment found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    
+{% endblock %}
