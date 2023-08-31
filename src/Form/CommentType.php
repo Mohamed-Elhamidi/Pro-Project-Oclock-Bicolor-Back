@@ -18,21 +18,21 @@ class CommentType extends AbstractType
     {
         $builder
             ->add('content', TextType::class,[
-                "label" => "Content",
+                "label" => "Contenu",
                 "attr" => [
-                    "placeholder" => "Your review of the game"
+                    "placeholder" => "Votre avis sur le jeu"
                 ]
             ])
             ->add('id_user', EntityType::class,[
                 'class' => User::class,
-                'label' => 'Your name',
+                'label' => 'Votre nom',
                 'expanded' => false,
                 'multiple' => false,
                 'choice_label' => 'name'
             ])
             ->add('id_game', EntityType::class,[
                 'class' => Game::class,
-                'label' => 'Name of the Game',
+                'label' => 'Nom du jeu',
                 'expanded' => true,
                 'multiple' => false,
                 'choice_label' => 'name'

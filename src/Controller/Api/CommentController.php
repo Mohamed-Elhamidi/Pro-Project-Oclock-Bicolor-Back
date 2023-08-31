@@ -2,9 +2,10 @@
 
 namespace App\Controller\Api;
 
-use App\Entity\Comment;
 use App\Entity\Game; 
+use App\Entity\Comment;
 use App\Repository\GameRepository;
+use App\Repository\UserRepository;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -120,6 +121,31 @@ class CommentController extends AbstractController
     }
 
     /**
+     * @Route("/api/comment/{id}/user", name="app_api_comment_user", methods={"GET"})
+     */
+    public function getCommentByUser(int $id, UserRepository $userRepository, CommentRepository $commentRepository): JsonResponse
+    {
+        $user = $userRepository->find($id);
+        
+        // Je récupère le commentaire utilisateur
+        $comments = $commentRepository->find($id);
+
+        
+        if (!$user) {
+            return $this->json(["error" => "User not found"], Response::HTTP_NOT_FOUND);
+        }
+
+        if (!$comments) {
+            return $this->json(["error" => "Not comments for this user"], Response::HTTP_NOT_FOUND);
+        }
+        // Je créer une réponse en JSON des scores, le groupe "scores" permet d'éviter les références circulaires
+        $response = $this->json($comments, 200, [], ['groups' => 'comments']);
+
+        // je retourne la réponse
+        return $response;
+    }
+
+    /**
      * @Route("/api/comment/{id}", name="app_api_comment_delete", methods={"DELETE"})
      */
     public function deleteComment(int $id, CommentRepository $commentRepository, EntityManagerInterface $entityManager): JsonResponse
@@ -137,5 +163,61 @@ class CommentController extends AbstractController
         return $this->json(["message" => "Comment deleted successfully"], Response::HTTP_OK);
     }
 
-    
+    /**
+     * @Route("/api/{id}/comment", name="app_api_comment_update", methods={"PATCH"})
+     */
+    public function updateComment(int $id,Request $request,SerializerInterface $serializer, ValidatorInterface $validator, EntityManagerInterface $entityManager, CommentRepository $commentRepository, TokenStorageInterface $tokenStorage, GameRepository $gameRepository): Response 
+    {
+        // Récupère l'utilisateur authentifié à partir du token
+        $user = $tokenStorage->getToken()->getUser();
+
+        // Trouver le commentaire à mettre à jour
+        $comment = $commentRepository->find($id);
+
+        if (!$comment) {
+            return $this->json(["error" => "Comment not found"], Response::HTTP_NOT_FOUND);
+        }
+
+        // Récupérer le JSON à partir de la requête
+        $jsonContent = $request->getContent();
+
+        try {
+            // Désérialiser le JSON dans l'entité Comment
+            $updatedComment = $serializer->deserialize($jsonContent, Comment::class, 'json', ['object_to_populate' => $comment]);
+            
+            // Mettre à jour la date de mise à jour
+            $updatedComment->setUpdatedAt(new \DateTimeImmutable());
+
+            // Mettre à jour l'utilisateur et le jeu associés
+            $updatedComment->setIdUser($user);
+
+            $jsonDataArray = json_decode($jsonContent, true);
+            $idJeuSoumis = $jsonDataArray['id_game'];
+            $jeu = $entityManager->getRepository(Game::class)->find($idJeuSoumis);
+            //dd($jeu);
+            $updatedComment->setIdGame($jeu);
+
+        } catch (NotEncodableValueException $e) {
+            return $this->json(["error" => "JSON INVALID"], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Valider l'entité Comment mise à jour
+        $errors = $validator->validate($updatedComment);
+
+        if (count($errors) > 0) {
+            $dataErrors = [];
+
+            foreach ($errors as $error) {
+                $dataErrors[$error->getPropertyPath()][] = $error->getMessage();
+            }
+
+            return $this->json($dataErrors, Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        // Persist et flush pour enregistrer les modifications
+        $entityManager->persist($updatedComment);
+        $entityManager->flush();
+
+        return $this->json([$updatedComment], Response::HTTP_OK, [], ["groups" => "comments"]);
+    }
 }

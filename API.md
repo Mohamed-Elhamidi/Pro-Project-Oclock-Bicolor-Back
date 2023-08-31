@@ -2,9 +2,12 @@ Liste de toutes nos routes API et leurs méthodes :
 
 LOGIN :
 
+
+
 | URL | Méthode | JSON |
 | --------- | --------- | --------- |
-| http://localhost:8000/api/login_check   | POST  |   |
+| http://localhost:8000/api/login_check   | POST  |  ```JSON
+
 
 
 
@@ -31,3 +34,5 @@ COMMENT:
 | Ligne 1   | Donnée A  | Donnée X  |
 | Ligne 2   | Donnée B  | Donnée Y  |
 | Ligne 3   | Donnée C  | Donnée Z  |
+
+

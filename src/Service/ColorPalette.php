@@ -52,7 +52,7 @@ class ColorPalette{
      * @param integer $colorCount
      * @return void
      */
-    public function createPalette($colorCount=4){
+    public function createPalette($colorCount=10){
 
         // création d'un tableau vide pour la palette de couleur
         $colorPalette = array();
@@ -65,16 +65,41 @@ class ColorPalette{
             }
             if($i == 2){
                 $color = $this->color;
-                $colorVariation = -($i * 4);
+                $colorVariation = -($i * 3);
             }
             if($i == 3){
                 $color = $this->color;
-                $colorVariation = -($i * 6);
+                $colorVariation = -($i * 4);
             }
             if($i == 4){
                 $color = $this->color;
+                $colorVariation = -($i * 5);
+            }
+            if($i == 5){
+                $color = $this->color;
+                $colorVariation = -($i * 6);
+            }
+            if($i == 6){
+                $color = $this->color;
+                $colorVariation = -($i * 7);
+            }
+            if($i == 7){
+                $color = $this->color;
                 $colorVariation = -($i * 8);
             }
+            if($i == 8){
+                $color = $this->color;
+                $colorVariation = -($i * 9);
+            }
+            if($i == 9){
+                $color = $this->color;
+                $colorVariation = -($i * 9);
+            }
+            if($i == 10){
+                $color = $this->color;
+                $colorVariation = -($i * 11);
+            }
+            
             
             // Crée une nouvelle couleur en appliquant la variation de luminosité à la couleur de base.
             $newColor = $this->color_mod($color, $colorVariation);

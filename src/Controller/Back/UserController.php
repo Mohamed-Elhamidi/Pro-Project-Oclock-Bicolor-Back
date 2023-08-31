@@ -36,7 +36,7 @@ class UserController extends AbstractController
             $user->setPassword($passwordHash);
 
             $userRepository->add($user, true);
-
+            $this->addFlash("success", "Utilisateur bien ajouté !");
             return $this->redirectToRoute('app_admin_user_list', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -78,7 +78,7 @@ class UserController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userRepository->add($user, true);
-
+            $this->addFlash("warning", "Utilisateur bien modifié !");
             return $this->redirectToRoute('app_admin_user_list', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -95,6 +95,7 @@ class UserController extends AbstractController
     {
         if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
             $userRepository->remove($user, true);
+            $this->addFlash("danger", "Utilisateur bien supprimé !");
         }
 
         return $this->redirectToRoute('app_admin_user_list', [], Response::HTTP_SEE_OTHER);

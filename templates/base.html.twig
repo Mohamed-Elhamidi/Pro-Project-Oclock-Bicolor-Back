@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <!-- Required meta tags -->
@@ -23,7 +23,8 @@
     <!-- Nav -->
     <nav class="navbar navbar-expand-lg navbar-dark {% block navCss %}bg-info{% endblock %}">
         <div class="container-fluid">
-            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo">
+        <div class="">Bicolor</div>
+            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo ">
                 <img src="#" height="24" alt="Logo Bicolor">
                 <span class="header-logo__title"><!-- Bicolor--></span>
             </a>
@@ -36,10 +37,10 @@
                     {% block nav %}
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% block userActive %}{% endblock %}" href="{{ path('app_admin_user_list') }}"><i class="bi bi-person"></i>Users</a>
+                            <a class="nav-link {% block userActive %}{% endblock %}" href="{{ path('app_admin_user_list') }}"><i class="bi bi-person"></i>Utilisateurs</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% block commentActive %}{% endblock %}" href="{{ path('app_admin_comment_list') }}"><i class="bi bi-chat-left-text"></i> Comments</a>
+                            <a class="nav-link {% block commentActive %}{% endblock %}" href="{{ path('app_admin_comment_list') }}"><i class="bi bi-chat-left-text"></i> Commentaires</a>
                         </li>
                          <span>{{app.user}}</span>
                         
@@ -49,13 +50,17 @@
 						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             
 						</ul>
-						<a href="#"  class="btn btn-danger me-2">Back to home page</a>
+                     
+						<a href="http://localhost:5173/"  class="btn btn-danger me-2">Retour page accueil</a>
 				
 
                 
             </div>
         </div>
     </nav>
+
+    {% include "fragments/_flash_message.html.twig" %}
+
 {% endblock %}
     
 
@@ -67,7 +72,7 @@
 </main>
 
     <!-- footer -->
-    <footer class="container-fluid py-2 border-top text-center fixed-bottom">
+    <footer class="container-fluid py-3 mt-5 border-top text-center">
         <span class="text-muted">Bicolor made with &hearts; at O'clock !
         </span>
     </footer>

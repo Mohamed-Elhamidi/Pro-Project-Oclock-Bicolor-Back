@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Comment{% endblock %}
+{% block title %}Modifier un utilisateur{% endblock %}
 
 {% block body %}
-   <h1 class="mx-2 mt-2">Comment {{comment.id}}</h1>
+   <h1 class="mx-2 mt-2">Utilisateur {{user.id}}</h1>
     <div class="container mt-5">
 
-    {{ include('back/user/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('back/user/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-    <a href="{{ path('app_admin_user_list') }}"class="btn btn-dark mt-3">Back to list</a>
+    <a href="{{ path('app_admin_user_list') }}"class="btn btn-dark mt-3">Retour liste</a>
 
     {{ include('back/user/_delete_form.html.twig') }}
     </div>

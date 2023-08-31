@@ -27,7 +27,7 @@ class CommentController extends AbstractController
 
 
             $commentRepository->add($comment, true);
-
+            $this->addFlash("success", "Commentaire bien ajouté !");
             return $this->redirectToRoute('app_admin_comment_list', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -74,7 +74,7 @@ class CommentController extends AbstractController
 
             // Enregistrer les modifications
             $commentRepository->save($comment);
-
+            $this->addFlash("warning", "Commentaire bien modifié !");
             return $this->redirectToRoute('app_admin_comment_list', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -92,7 +92,7 @@ class CommentController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$comment->getId(), $request->request->get('_token'))) {
             $commentRepository->remove($comment, true);
         }
-
+        $this->addFlash("danger", "Commentaire bien supprimé !");
         return $this->redirectToRoute('app_admin_comment_list', [], Response::HTTP_SEE_OTHER);
     }
 

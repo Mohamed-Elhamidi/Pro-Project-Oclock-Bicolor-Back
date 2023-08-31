@@ -21,14 +21,14 @@ class UserType extends AbstractType
             ->add('email',EmailType::class,[
                 "label" => "Email",
                 "attr" => [
-                    "placeholder" => "Mail of the user"
+                    "placeholder" => "Mail de l'utilisateur"
                 ]
             ])
 
             ->add('name',TextType::class,[
                 "label" => "Name",
                 "attr" => [
-                    "placeholder" => "Name of the user"
+                    "placeholder" => "Nom de l'utilisateur"
                 ]
             ] );
 
@@ -42,19 +42,19 @@ class UserType extends AbstractType
                 // Je souhaite ici utiliser le champ repeated pour avoir deux champs password
                 // https://symfony.com/doc/current/reference/forms/types/repeated.html
                     ->add('password',RepeatedType::class,[
-                        "help" => "4 characters minimum",
+                        "help" => "4 charactères minimum",
                         // D'ou ici l'interet de mettre une contrainte directement dans le form vu que le mot de passe s'affichera conditionnellement
                         "constraints" => [
                             new Length([
                                 "min" => 4,
-                                "minMessage" => "4 characters minimum"
+                                "minMessage" => "4 charactères minimum"
                             ])
                         ],
                         "type" => PasswordType::class,
-                        'invalid_message' => 'The password need to be identical',
+                        'invalid_message' => 'les 2 mots de passe doivent être identiques',
                         'required' => true,
-                        'first_options'  => ['label' => 'Your password',"attr" => ["placeholder" => "*****"]],
-                        'second_options' => ['label' => 'Repeat your password',"attr" => ["placeholder" => "*****"]],
+                        'first_options'  => ['label' => 'Votre mot de passe',"attr" => ["placeholder" => "*****"]],
+                        'second_options' => ['label' => 'Répétez votre mot de passe',"attr" => ["placeholder" => "*****"]],
                     ]);
             }
             $builder
@@ -62,7 +62,7 @@ class UserType extends AbstractType
                     "label" => "Role",
                     "choices" => [
                         
-                        "Admin" => "ROLE_ADMIN"
+                        "Administrateur" => "ROLE_ADMIN"
                     ],
                     "multiple" => true,
                     "expanded" => true
