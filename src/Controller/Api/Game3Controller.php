@@ -41,12 +41,13 @@ class Game3Controller extends AbstractController
         $randomColor = $options[array_rand($options)];
         // je récupère uniquement le format hexadecimal pour l'ajouter au json
         $hexColor = $randomColor["hex"];
+        $nameColor = $randomColor["name"];
         
 
 
         return $this->json([
             "options" => $options,
-            "color" => $hexColor,
+            "color" => $nameColor,
             "answer" => $hexColor
         ]);
     }
