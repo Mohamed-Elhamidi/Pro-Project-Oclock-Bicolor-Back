@@ -36,12 +36,14 @@ class Comment
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Groups({"comments"})
      */
     private $id_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="comments")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Groups({"comments"})
      */
     private $id_game;

@@ -21,12 +21,14 @@ class Scores
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="scores")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id_user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="scores")
+     * @ORM\JoinColumn(onDelete="CASCADE")
      * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id_game;
