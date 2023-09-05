@@ -24,7 +24,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark {% block navCss %}bg-info{% endblock %}">
         <div class="container-fluid">
         <div class=""></div>
-            <a href="#" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo ">
+            <a href="{{ path('app_admin_user_list') }}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo ">
                 <img src="{{ asset('images/logo-bicolor-noir-fond-transparent.png')}}" height="42" alt="Logo Bicolor">
                 <span class="header-logo__title"><!-- Bicolor--></span>
             </a>
@@ -42,7 +42,7 @@
                         <li class="nav-item">
                             <a class="nav-link {% block commentActive %}{% endblock %}" href="{{ path('app_admin_comment_list') }}"><i class="bi bi-chat-left-text"></i> Commentaires</a>
                         </li>
-                         <span>{{app.user}}</span>
+                        
                         
                     
                 </ul>
@@ -50,7 +50,7 @@
 						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             
 						</ul>
-                     
+                        <a href="/logout"  class="btn btn-danger me-2">Deconnexion</a>
 						<a href="http://florentsicard-server.eddi.cloud"  class="btn btn-danger me-2">Retour page accueil</a>
 				
 
