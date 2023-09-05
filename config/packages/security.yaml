@@ -24,11 +24,7 @@ security:
                 check_path: /api/login_check
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
-            custom_authenticator: App\Security\LoginAuthenticator
-            logout:
-                path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
+            
                 
         api:
             pattern:   ^/api
@@ -39,10 +35,11 @@ security:
             lazy: true
             provider: app_user_provider
             form_login:
-                login_path: app_login
-                check_path: app_login
+                login_path: app_security_login
+                check_path: app_security_login
             logout:
-                path: app_logout
+                path: app_security_logout
+                target: app_security_login
             
 
             # activate different ways to authenticate
