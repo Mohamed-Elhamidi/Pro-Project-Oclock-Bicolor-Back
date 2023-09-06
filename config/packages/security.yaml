@@ -37,6 +37,7 @@ security:
             form_login:
                 login_path: app_security_login
                 check_path: app_security_login
+                default_target_path: app_admin_user_list
             logout:
                 path: app_security_logout
                 target: app_security_login
@@ -53,6 +54,7 @@ security:
     access_control:
         - { path: ^/api/createUser, roles: PUBLIC_ACCESS, methods: ["POST"] }
         - { path: ^/admin/login,     roles: PUBLIC_ACCESS }
+        - { path: ^/admin/logout,     roles: ROLE_USER }
         - { path: ^/api/score,       roles: ROLE_USER }
         - { path: ^/api/game,       roles: ROLE_USER }
         - { path: ^/api/comment,       roles: ROLE_USER }
