@@ -50,6 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_user", orphanRemoval=true)
+     * @ORM\OrderBy({"nbPoints" = "DESC"})
      */
     private $scores;
 
