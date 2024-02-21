@@ -1,19 +1,93 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<!doctype html>
+<html lang="fr">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="icon" href="#">
+		<link rel="stylesheet" href="https://bootswatch.com/5/sketchy/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <!-- Our custom CSS -->
+    <link rel="stylesheet" href="#">
+    <!-- favicon -->
+    <link rel="shortcut icon" href="{{ asset('images/favicon-bicolor-noir.png')}}" type="image/x-icon">
+
+    <title>{% block title %}Bicolor{% endblock %}</title>
+</head>
+
+<body>
+
+    <!-- Nav -->
+    <nav class="navbar navbar-expand-lg navbar-dark {% block navCss %}bg-info{% endblock %}">
+        <div class="container-fluid">
+        <div class=""></div>
+            <a href="{{ path('app_admin_user_list') }}" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none header-logo ">
+                <img src="{{ asset('images/logo-bicolor-noir-fond-transparent.png')}}" height="42" alt="Logo Bicolor">
+                <span class="header-logo__title"><!-- Bicolor--></span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    {% block nav %}
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% block userActive %}{% endblock %}" href="{{ path('app_admin_user_list') }}"><i class="bi bi-person"></i>Utilisateurs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% block commentActive %}{% endblock %}" href="{{ path('app_admin_comment_list') }}"><i class="bi bi-chat-left-text"></i> Commentaires</a>
+                        </li>
+                        
+                        
+                    
+                </ul>
+                
+						<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            
+						</ul>
+                        <a href="{{ path('app_security_logout') }}"  class="btn btn-danger me-2">Deconnexion</a>
+						<a href="http://localhost:5173/"  class="btn btn-danger me-2">Retour page accueil</a>
+				
+
+                
+            </div>
+        </div>
+    </nav>
+
+    {% include "fragments/_flash_message.html.twig" %}
+
+{% endblock %}
+    
+
+
+<main>
+
+      {% block body %}{% endblock %}
+
+</main>
+
+    <!-- footer -->
+    <footer class="container-fluid py-3 mt-5 border-top text-center">
+        <span class="text-muted">Bicolor made with &hearts; at O'clock !
+        </span>
+    </footer>
+
+    <!-- Optional JavaScript; choose one of 
+        the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <!--
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-W8fXfP3gkOKtndU4JGtKDvXbO53Wy8SZCQHczT5FMiiqmQfUpWbYdTil/SxwZgAN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.min.js" integrity="sha384-skAcpIdS7UcVUC05LJ9Dxay8AXcDYfBJqt1CJ85S/CFujBsIzCIv+l9liuYLaMQ/" crossorigin="anonymous"></script>
+    -->
+</body>
+
 </html>

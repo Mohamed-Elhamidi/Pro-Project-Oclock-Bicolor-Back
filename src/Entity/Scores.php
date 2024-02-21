@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Game;
 use App\Repository\ScoresRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ScoresRepository::class)
@@ -19,17 +20,22 @@ class Scores
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="scores")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="scores")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Groups({"scores", "gameScores"})
      */
     private $id_user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=game::class, inversedBy="scores")
+     * @ORM\ManyToOne(targetEntity=Game::class, inversedBy="scores")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $id_game;
 
     /**
      * @ORM\Column(type="integer")
+     * @Groups({"scores", "gameScores", "userScores"})
      */
     private $nbPoints;
 

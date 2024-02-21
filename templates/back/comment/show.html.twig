@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Commentaires{% endblock %}
+
+{% block body %}
+    <h1 class="mx-2 mt-2">Commentaire {{comment.id}}</h1>
+    <div class="container mt-5">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <th>Contenu</th>
+                <th>Nom</th>
+                <th>Jeu</th>
+               
+                
+            </tr>
+            <tr>
+            
+					<td>{{ comment.id }}</td>
+                    <td>{{ comment.content }}</td>   
+
+            {% for user in users %}
+                {% if comment.idUser.id == user.id %}
+                    <td>{{ user.name }}</td>
+                {% endif %}
+            {% endfor %}
+
+            {% for game in games %}
+                {% if comment.idGame.id == game.id %}
+                    <td>{{ game.name }}</td>
+                {% endif %}
+            {% endfor %}
+					
+					
+			</tr>
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_comment_list') }}"class="btn btn-dark mt-3">Retour liste</a>
+
+    <a href="{{ path('app_admin_comment_edit', {'id': comment.id}) }}" class="btn btn-success mt-3">Modifier</a>
+
+   {{ include('back/comment/_delete_form.html.twig') }}
+   </div>
+{% endblock %}
