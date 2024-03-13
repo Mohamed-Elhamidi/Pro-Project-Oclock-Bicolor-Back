@@ -48,7 +48,7 @@ class UserType extends AbstractType
                             new Length([
                                 "min" => 4,
                                 "minMessage" => "4 charactères minimum"
-                            ])
+                            ]),
                         ],
                         "type" => PasswordType::class,
                         'invalid_message' => 'les 2 mots de passe doivent être identiques',
