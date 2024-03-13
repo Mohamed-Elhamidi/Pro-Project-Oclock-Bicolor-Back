@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateurs{% endblock %}
+
+{% block body %}
+    <h1 class="mx-2 mt-2">Utilisateur {{user.id}}</h1>
+    <div class="container mt-5">
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Jeu 1</th>
+                <th>Jeu 2</th>
+                <th>Jeu 3</th>
+               
+                
+            </tr>
+            <tr>
+					<td>{{ user.id }}</td>
+					<td>{{ user.name }}</td>
+					<td>{{ user.email }}</td>
+					<td>{{ user.roles ? user.roles|json_encode : '' }}</td>
+
+
+					<td>
+						{% for scores in user.scores %}
+							{% if scores.idgame.id == 1 %}
+								<div>
+									Le {{scores.startGame|date('d-m-Y')}} = {{scores.nbPoints}} points<br/>
+                                </div>
+							{% endif %}
+						{% endfor %}
+					</td>
+
+					<td>
+						{% for scores in user.scores %}
+							{% if scores.idgame.id == 2 %}
+								<div>
+									Le {{scores.startGame|date('d-m-Y')}} = {{scores.nbPoints}} points<br/>
+                                </div>
+							{% endif %}
+						{% endfor %}
+					</td>
+
+					<td>
+						{% for scores in user.scores %}
+							{% if scores.idgame.id == 3 %}
+								<div>
+									Le {{scores.startGame|date('d-m-Y')}} = {{scores.nbPoints}} points<br/>
+                                </div>
+							{% endif %}
+						{% endfor %}
+					</td>
+				</tr>
+
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_admin_user_list') }}"class="btn btn-dark mt-3">Retour liste</a>
+
+    <a href="{{ path('app_admin_user_edit', {'id': user.id}) }}" class="btn btn-success mt-3">Modifier</a>
+
+   {{ include('back/user/_delete_form.html.twig') }}
+   </div>
+{% endblock %}

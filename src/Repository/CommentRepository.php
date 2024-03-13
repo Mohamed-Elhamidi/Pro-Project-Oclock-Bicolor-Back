@@ -39,6 +39,12 @@ class CommentRepository extends ServiceEntityRepository
         }
     }
 
+    public function save(Comment $entity): void
+    {
+        $this->_em->persist($entity);
+        $this->_em->flush();
+    }
+
 //    /**
 //     * @return Comment[] Returns an array of Comment objects
 //     */

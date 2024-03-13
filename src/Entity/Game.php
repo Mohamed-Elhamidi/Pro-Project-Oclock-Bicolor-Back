@@ -6,6 +6,7 @@ use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=GameRepository::class)
@@ -16,11 +17,13 @@ class Game
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"scores", "gameScores"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"scores", "gameScores", "userScores", "comments"})
      */
     private $name;
 
@@ -35,12 +38,12 @@ class Game
     private $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_game")
+     * @ORM\OneToMany(targetEntity=Scores::class, mappedBy="id_game", orphanRemoval=true)
      */
     private $scores;
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="idGame")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="id_game", orphanRemoval=true)
      */
     private $comments;
 
