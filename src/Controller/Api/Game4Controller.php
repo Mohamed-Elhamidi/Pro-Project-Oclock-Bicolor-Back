@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Round;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class Game4Controller extends AbstractController
 {
@@ -63,5 +64,60 @@ class Game4Controller extends AbstractController
         }
 
         return $options;
+    }
+
+
+    // ...
+
+    /**
+     * @Route("/api/game/4/answer", name="app_api_game4_answer", methods={"POST"})
+     */
+    public function answer(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        $roundId = $data['roundId'];
+        $playerAnswer = $data['answer'];
+
+        $round = $this->entityManager->getRepository(Round::class)->find($roundId);
+
+        if (!$round) {
+            return $this->json(['error' => 'Round introuvable'], 404);
+        }
+
+        // Vérification 1 : à toi — le round appartient-il bien au joueur connecté ?
+        // indice : $round->getUser() renvoie l'objet User lié, $this->getUser() le joueur connecté.
+        // Compare-les avec !==
+        if ($round->getUser() !== $this->getUser()) {
+            return $this->json(['error' => 'Accès interdit'], 403);
+        }
+
+        // Vérification 2 : à toi — le round a-t-il déjà été répondu ?
+        // indice : quelle propriété de $round est encore vide (null) tant qu'on n'a pas répondu ?
+        if ($round->getEndTime() !== null) {
+            return $this->json(['error' => 'Round déjà répondu'], 400);
+        }
+
+        $elapsedSeconds = (new \DateTime())->getTimestamp()
+            - $round->getStartTime()->getTimestamp(); /* différence en secondes entre maintenant et $round->getStartTime() */
+
+        $isCorrect = $playerAnswer === $round->getCorrectColor();
+        $points = 0;
+        if ($isCorrect) {
+            $points = 1;
+            if ($elapsedSeconds < 2) {
+                $points += 1;
+            }
+        }
+
+        $round->setEndTime(new \DateTime());
+        $round->setPoints($points);
+
+        $this->entityManager->persist($round);
+        $this->entityManager->flush();
+
+        return $this->json([
+            'correct' => $isCorrect,
+            'points' => $points,
+        ]);
     }
 }
