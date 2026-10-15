@@ -35,6 +35,11 @@ class AppProvider
             "name" => "Game 3"
         ],
 
+        "game4" => [
+            "name" => "Speed Color"
+        ],
+
+
     ];
 
      /**
@@ -61,4 +66,12 @@ class AppProvider
     }
 
 
+        /**
+     * Get all games
+     * @return array the full list of games
+     */
+    public function games()
+    {
+        return $this->game;
+    }
 }

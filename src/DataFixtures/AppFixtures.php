@@ -46,7 +46,8 @@ class AppFixtures extends Fixture
             // Je set l'email, c'est une string simple
             $admin->setEmail($dataUser["email"]);
             // Je set le password, c'est une string simple
-            // J'utilise le passwordHasher passé au constructeur, ça s'appelle de l'injection de dépendance (on en parlera dans les prochains jours), il contient la méthode hashPassword qui permet de changer une string en hash par rapport à la méthode de hashage définis dans security.yaml
+            // J'utilise le passwordHasher passé au constructeur, ça s'appelle de l'injection de dépendance (on en parlera dans les prochains jours), 
+            // il contient la méthode hashPassword qui permet de changer une string en hash par rapport à la méthode de hashage définis dans security.yaml
             // ! SI PAS DE HASH, PAS POSSIBLE DE S'AUTHENTIFIER
             // ! DE PLUS UN MDP EN CLAIR EN BDD EST A LA LIMITE DE L'ILLEGALITE
             $admin->setPassword($this->passwordHasher->hashPassword($admin, $dataUser["password"]));
@@ -61,10 +62,9 @@ class AppFixtures extends Fixture
 
 
         //! GAMES
-        for ($g = 0; $g < 3; $g++) {
-            // j'utilise mon provider pour récupérer un game unique
-            $dataGame = $faker->game();
-            // J'instancie un nouvel obet game
+       
+        foreach ($faker->games() as $dataGame) {
+            // J'instancie un nouvel objet game
             $game = new Game();
             // je set le nom du game
             $game->setName($dataGame["name"]);
