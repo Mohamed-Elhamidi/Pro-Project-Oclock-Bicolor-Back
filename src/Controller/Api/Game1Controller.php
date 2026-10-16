@@ -23,10 +23,14 @@ class Game1Controller extends AbstractController
         for ($i = 0; $i < $numberOfColors; $i++) {
             // Génère un nombre aléatoire entre 0 et 16777215 (FFFFFF en hexadécimal)
             $randomNumber = rand(0, 16777215);
-            
-            // Convertit le nombre en format hexadécimal
-            $hexColor = '#' . strtoupper(dechex($randomNumber));
-            
+        
+            // Convertit le nombre en hexadécimal, sur 6 caractères
+            $hexColor = dechex($randomNumber);
+            $hexColor = str_pad($hexColor, 6, '0', STR_PAD_LEFT);
+        
+            // Ajoute le # et met en majuscules
+            $hexColor = '#' . strtoupper($hexColor);
+        
             // Ajoute la couleur générée au tableau d'options
             $options[] = $hexColor;
         }
