@@ -14,15 +14,18 @@ class Game2Controller extends AbstractController
      */
     public function game2(): JsonResponse
     {
+        $randomNumber = rand(0, 10000000);
         // permet d'obtenir une couleur aléatoire au format hexadécimal
-        $randomcolor = '#' . strtoupper(dechex(rand(0, 10000000)));
+        $hexColor = dechex($randomNumber);
+        $hexColor = str_pad($hexColor, 6, '0', STR_PAD_LEFT);
+        $randomColor = '#' . strtoupper($hexColor);
 
         // instancie le service ColorPalette qui créer 4 couleurs du plus clair au plus foncé à partir d'une couleur qu'on lui transmets
-        $color = new ColorPalette($randomcolor);
+        $color = new ColorPalette($randomColor);
 
         // création de la palette de couleur
         $colorPalette = $color->createPalette();
-        
+
 
         return $this->json([
             "colors" => $colorPalette
