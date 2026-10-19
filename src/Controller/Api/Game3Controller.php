@@ -25,7 +25,7 @@ class Game3Controller extends AbstractController
 
         for ($i = 0; $i < $numberOfColors; $i++) {
             // 1. Tirer un nombre au hasard : chaque nombre correspond à une couleur.
-            $randomNumber = rand(0, 10000000);
+            $randomNumber = rand(0, 16777215);   // 16777215 = FFFFFF, toute la palette RVB
 
             // 2. Le convertir en hexadécimal (ex. 255 devient "ff").
             $hexColor = dechex($randomNumber);
