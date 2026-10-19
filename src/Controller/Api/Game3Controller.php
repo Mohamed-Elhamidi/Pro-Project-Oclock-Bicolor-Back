@@ -24,8 +24,19 @@ class Game3Controller extends AbstractController
         $numberOfColors = 4;
 
         for ($i = 0; $i < $numberOfColors; $i++) {
-            //permet d'obtenir une couleur hexadécimal aléatoire
-            $randomColor = '#' . strtoupper(dechex(rand(0, 10000000)));
+            // 1. Tirer un nombre au hasard : chaque nombre correspond à une couleur.
+            $randomNumber = rand(0, 10000000);
+
+            // 2. Le convertir en hexadécimal (ex. 255 devient "ff").
+            $hexColor = dechex($randomNumber);
+
+            // 3. Compléter avec des zéros à gauche pour avoir toujours 6 caractères.
+            // Sans ça, 255 donnerait "ff", un code invalide : la bibliothèque
+            // NameThatColor ne le comprend pas et répond "White" au lieu de "Blue".
+            $hexColor = str_pad($hexColor, 6, '0', STR_PAD_LEFT);
+
+            // 4. Mettre en majuscules et ajouter le "#" devant (ex. "#0000FF").
+            $randomColor = '#' . strtoupper($hexColor);
 
             // nouvelle instance du bundle NameThatColor
             $instance = new NameThatColor();
@@ -36,13 +47,13 @@ class Game3Controller extends AbstractController
             // j'ajoute le tableau de la couleur dans le tableau d'options
             $options[] = $result;
         }
-        
+
         // Je récupère une couleur dans le tableau options pour les valeurs color et answer du jeu
         $randomColor = $options[array_rand($options)];
         // je récupère uniquement le format hexadecimal pour l'ajouter au json
         $hexColor = $randomColor["hex"];
         $nameColor = $randomColor["name"];
-        
+
 
 
         return $this->json([
